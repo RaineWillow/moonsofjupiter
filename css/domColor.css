@@ -1,0 +1,22 @@
+.backgroundMenu {
+  background-color: #1a1a1a;
+  color: white;
+}
+
+.midgroundMenu {
+  background-color: #232323;
+}
+
+.foregroundMenu {
+  color: white;
+  background-color: #2a2a2a;
+  box-shadow: 0 0 3px 3px #1f1f1f;
+}
+
+.foregroundMenu:hover {
+  box-shadow: 0 0 3px 3px #9a9a9a;
+}
+
+.foregroundMenuSelected {
+  background-color: #3f3f3f !important;
+}

@@ -1,5 +1,8 @@
 <html>
 <head>
+  <meta charset="UTF-8">
+  <meta meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
   <link rel="stylesheet" href="./css/domSize.css">
   <link rel="stylesheet" href="./css/domColor.css">
   <title>The Moons of Jupiter</title>
@@ -9,11 +12,111 @@
   <div id="container" class="containerDiv">
 
   </div>
+
+  <div class="uiContainer">
+    <div class="timeController backgroundMenu">
+      <div class="smallerSpacer"></div>
+      <div class="timeControllerFlexBox midgroundMenu">
+        <div class="control foregroundMenu" id="hourDecrementer">
+          <svg stroke="#ffffff" xmlns="http://www.w3.org/2000/svg" height="40px" width="40px" fill="#ffffff" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M459.5 440.6c9.5 7.9 22.8 9.7 34.1 4.4s18.4-16.6 18.4-29V96c0-12.4-7.2-23.7-18.4-29s-24.5-3.6-34.1 4.4L288 214.3V256v41.7L459.5 440.6zM256 352V256 128 96c0-12.4-7.2-23.7-18.4-29s-24.5-3.6-34.1 4.4l-192 160C4.2 237.5 0 246.5 0 256s4.2 18.5 11.5 24.6l192 160c9.5 7.9 22.8 9.7 34.1 4.4s18.4-16.6 18.4-29V352z"/></svg>
+        </div>
+        <div id="playpause" class="control foregroundMenu">
+          <svg stroke="#ffffff" xmlns="http://www.w3.org/2000/svg" height="40px" width="40px" fill="#ffffff" viewBox="0 0 320 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M48 64C21.5 64 0 85.5 0 112V400c0 26.5 21.5 48 48 48H80c26.5 0 48-21.5 48-48V112c0-26.5-21.5-48-48-48H48zm192 0c-26.5 0-48 21.5-48 48V400c0 26.5 21.5 48 48 48h32c26.5 0 48-21.5 48-48V112c0-26.5-21.5-48-48-48H240z"/></svg>
+        </div>
+        <div class="control foregroundMenu" id="hourIncrementer">
+          <svg stroke="#ffffff" xmlns="http://www.w3.org/2000/svg" height="40px" width="40px" fill="#ffffff" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M52.5 440.6c-9.5 7.9-22.8 9.7-34.1 4.4S0 428.4 0 416V96C0 83.6 7.2 72.3 18.4 67s24.5-3.6 34.1 4.4L224 214.3V256v41.7L52.5 440.6zM256 352V256 128 96c0-12.4 7.2-23.7 18.4-29s24.5-3.6 34.1 4.4l192 160c7.3 6.1 11.5 15.1 11.5 24.6s-4.2 18.5-11.5 24.6l-192 160c-9.5 7.9-22.8 9.7-34.1 4.4s-18.4-16.6-18.4-29V352z"/></svg>
+        </div>
+      </div>
+      <div class="spacer"></div>
+      <label for="currentHourSet">Current Hour:</label>
+      <span>
+        <input placeholder="0.00" name="currentHourSet" id="currentHourSet" disabled="true" class="currentHourContainer"></input>
+      </span>
+      <div class="spacer"></div>
+      <div class="slider midgroundMenu">
+        Animation Speed: <span id="animationSpeedDisplay"></span>
+        <input type="range" min="0.1" max="10" value="0.1" step="0.01" class="innerSlider" id="myRange">
+      </div>
+      <div class="smallerSpacer"></div>
+      <div class="slider midgroundMenu">
+        Camera Zoom: <span id="zoomDisplay"></span>
+        <input type="range" min="1.0" max="6.65" value="6.65" step="0.01" class="innerSlider" id="zoomSlider">
+      </div>
+    </div>
+
+    <div class="bodySelector backgroundMenu">
+      <div class="smallerSpacer"></div>
+      <div class="body-controlFlexbox midgroundMenu">
+        <div id="JupiterSelect" class="body-control foregroundMenu">
+          <div class="spacer"></div>
+          <div>
+            <img src="./images/Jupiter.png" width="98px">
+          </div>
+          <div class="spacer"></div>
+          Jupiter
+          <div class="spacer"></div>
+        </div>
+        <div id="CallistoSelect" class="body-control foregroundMenu">
+          <div class="spacer"></div>
+          <div>
+            <img src="./images/Callisto.png" width="98px">
+          </div>
+          <div class="spacer"></div>
+          Callisto
+          <div class="spacer"></div>
+        </div>
+        <div id="GanymedeSelect" class="body-control foregroundMenu">
+          <div class="spacer"></div>
+          <div>
+            <img src="./images/Ganymede.png" width="98px">
+          </div>
+          <div class="spacer"></div>
+          Ganymede
+          <div class="spacer"></div>
+        </div>
+        <div id="EuropaSelect" class="body-control foregroundMenu">
+          <div class="spacer"></div>
+          <div>
+            <img src="./images/Europa.png" width="98px">
+          </div>
+          <div class="spacer"></div>
+          Europa
+          <div class="spacer"></div>
+        </div>
+        <div id="IoSelect" class="body-control foregroundMenu">
+          <div class="spacer"></div>
+          <div>
+            <img src="./images/Io.png" width="98px">
+          </div>
+          <div class="spacer"></div>
+          Io
+          <div class="spacer"></div>
+        </div>
+      </div>
+      <div class="spacer"></div>
+      🙠  Body Selection  🙢
+    </div>
+
+    <div class="dataTable backgroundMenu">
+      <div class="smallerSpacer"></div>
+      <div class="dataTableFlexBox midgroundMenu">
+        <div id = "MeasureButton" class="dataTableControl foregroundMenu">
+          Measure
+        </div>
+        <div id = "ObserveButton" class="dataTableControl foregroundMenu foregroundMenuSelected">
+          Observe
+        </div>
+      </div>
+    </div>
+
+
+  </div>
 </body>
 <script type="importmap">
   {
       "imports": {
           "three": "https://unpkg.com/three@0.138.0/build/three.module.js",
+          "GLTFLoader" : "https://unpkg.com/three@0.138.0/examples/jsm/loaders/GLTFLoader.js",
           "OrbitControls": "https://unpkg.com/three@0.138.0/examples/jsm/controls/OrbitControls.js"
       }
   }
