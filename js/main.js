@@ -69,7 +69,8 @@ var stars = new Array(0);
   starsGeometry.setAttribute(
     "position", new THREE.Float32BufferAttribute(stars, 3)
   );
-  var starsMaterial = new THREE.PointsMaterial( { color: 0x777777 } );
+  var starsMaterial = new THREE.PointsMaterial( { color: 0xaaaaaa } );
+  starsMaterial.size = 1;
   var starField = new THREE.Points( starsGeometry, starsMaterial );
   scene.add( starField );
 var ambientLight = new THREE.AmbientLight( 0xffffff, 1.4);
@@ -118,7 +119,7 @@ let gRadius = 1070000;
 let eRadius = 670900;
 let iRadius = 421600;
 
-let spaceConversion = 10 ** -3;
+let spaceConversion = 10 ** -3 * 1.1123;
 //---------------------------------------------------------------------------------------------------------------------------------------
 
 document.getElementById("jName").innerText=jName;
