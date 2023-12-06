@@ -60,7 +60,7 @@ scene.add( light );
 
 var stars = new Array(0);
   for ( var i = 0; i < 10000; i ++ ) {
-    let x = THREE.Math.randFloatSpread( 8000 );
+    let x = THREE.Math.randFloatSpread( 10000 );
     let y = THREE.Math.randFloatSpread( 4000 );
     let z = THREE.Math.randFloat(-2000, -8000);
     stars.push(x, y, z);
@@ -386,8 +386,8 @@ document.getElementById("MeasureButton").addEventListener("click", setMeasureMod
 //update RENDERING LOGIC-----------------------------------------------------------------------------------------------------------------
 
 const handleCamera = function() {
-  let maxBorderX = 1500+(window.innerWidth/2.0)*(maxSize);
-  let minBorderX = -1500-(window.innerWidth/2.0)*(maxSize);
+  let maxBorderX = 1900+(window.innerWidth/2.0)*(maxSize);
+  let minBorderX = -1900-(window.innerWidth/2.0)*(maxSize);
   let maxBorderY = 1200+(window.innerHeight/2.0)*(maxSize);
   let minBorderY = -1200-(window.innerHeight/2.0)*(maxSize);
 
