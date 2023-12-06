@@ -89,7 +89,7 @@ let zoomDisplay = document.getElementById("zoomDisplay");
 let zoomController = document.getElementById("zoomSlider");
 let maximumZoom = parseFloat(zoomController.getAttribute("max"))+0.32;
 
-camera.position.set(0, 0, 2000);
+camera.position.set(0, 0, 2100);
 
 //data table-----------------------------------------------------------------------------------------------------------------------------
 
@@ -462,6 +462,7 @@ const rendering = function() {
       
       planets[i].update(dt*animationSpeed, orbitTime);
     }
+    console.log(planets[1].position);
     handleCamera();
       //camera.position.set(Math.sin(dt*0.001)*500, 0, Math.cos(dt*0.001)*500);
       //camera.lookAt(new THREE.Vector3(0,0,0));
