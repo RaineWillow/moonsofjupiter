@@ -312,7 +312,7 @@ function updateMouseDrag(e) {
   let updateY = Math.min(Math.max(camera.position.y + (-mouseY*(2*camera.bottom/window.innerHeight)), minCameraY), maxCameraY);
 
   //var cameraVector = camera.getWorldDirection();
-  camera.position.set(updateX, updateY, 2000);
+  camera.position.set(updateX, updateY, camera.position.z);
 }
 
 function updateMouse(e) {
