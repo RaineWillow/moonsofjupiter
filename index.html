@@ -13,9 +13,77 @@
 
   </div>
 
+  <div id="topHeightController" class="topuiContainer">
+  
+    <div id="bodyOpen" class="bodySelector backgroundMenu hider">
+      <div id="setBodySelectClosed" class="hideControl foregroundMenu">
+        🙠  Body Selection  🙢
+      </div>
+      <div class="spacer"></div>
+      <div class="body-controlFlexbox midgroundMenu">
+        <div id="JupiterSelect" class="body-control foregroundMenu">
+          <div class="spacer"></div>
+          <div>
+            <img src="./images/Jupiter.png" width="90%">
+          </div>
+          <div class="spacer"></div>
+          Jupiter
+          <div class="spacer"></div>
+        </div>
+        <div id="CallistoSelect" class="body-control foregroundMenu">
+          <div class="spacer"></div>
+          <div>
+            <img src="./images/Callisto.png" width="90%">
+          </div>
+          <div class="spacer"></div>
+          Callisto
+          <div class="spacer"></div>
+        </div>
+        <div id="GanymedeSelect" class="body-control foregroundMenu">
+          <div class="spacer"></div>
+          <div>
+            <img src="./images/Ganymede.png" width="90%">
+          </div>
+          <div class="spacer"></div>
+          Ganymede
+          <div class="spacer"></div>
+        </div>
+        <div id="EuropaSelect" class="body-control foregroundMenu">
+          <div class="spacer"></div>
+          <div>
+            <img src="./images/Europa.png" width="90%">
+          </div>
+          <div class="spacer"></div>
+          Europa
+          <div class="spacer"></div>
+        </div>
+        <div id="IoSelect" class="body-control foregroundMenu">
+          <div class="spacer"></div>
+          <div>
+            <img src="./images/Io.png" width="90%">
+          </div>
+          <div class="spacer"></div>
+          Io
+          <div class="spacer"></div>
+        </div>
+      </div>
+      <div class="spacer"></div>
+    </div>
+
+
+    <div id="bodyClosed" class="hideControlContainer backgroundMenu">
+      <div id="setBodySelectOpen" class="hideControl foregroundMenu">
+        🙠  Body Selection  🙢
+      </div>
+    </div>
+      
+
   <div class="uiContainer">
     <div class="timeController backgroundMenu">
-      <div class="smallerSpacer"></div>
+      <div class="hideControl foregroundMenu">
+        🙠  Animation Controls  🙢
+      </div>
+      <div class="spacer"></div>
       <div class="timeControllerFlexBox midgroundMenu">
         <div class="control foregroundMenu" id="hourDecrementer">
           <svg stroke="#ffffff" xmlns="http://www.w3.org/2000/svg" height="40px" width="40px" fill="#ffffff" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M459.5 440.6c9.5 7.9 22.8 9.7 34.1 4.4s18.4-16.6 18.4-29V96c0-12.4-7.2-23.7-18.4-29s-24.5-3.6-34.1 4.4L288 214.3V256v41.7L459.5 440.6zM256 352V256 128 96c0-12.4-7.2-23.7-18.4-29s-24.5-3.6-34.1 4.4l-192 160C4.2 237.5 0 246.5 0 256s4.2 18.5 11.5 24.6l192 160c9.5 7.9 22.8 9.7 34.1 4.4s18.4-16.6 18.4-29V352z"/></svg>
@@ -40,65 +108,15 @@
       <div class="smallerSpacer"></div>
       <div class="slider midgroundMenu">
         Camera Zoom: <span id="zoomDisplay"></span>
-        <input type="range" min="1.0" max="6.65" value="6.65" step="0.01" class="innerSlider" id="zoomSlider">
+        <input type="range" min="1.0" max="8" value="6.65" step="0.01" class="innerSlider" id="zoomSlider">
       </div>
-    </div>
-
-    <div class="bodySelector backgroundMenu">
-      <div class="smallerSpacer"></div>
-      <div class="body-controlFlexbox midgroundMenu">
-        <div id="JupiterSelect" class="body-control foregroundMenu">
-          <div class="spacer"></div>
-          <div>
-            <img src="./images/Jupiter.png" width="98px">
-          </div>
-          <div class="spacer"></div>
-          Jupiter
-          <div class="spacer"></div>
-        </div>
-        <div id="CallistoSelect" class="body-control foregroundMenu">
-          <div class="spacer"></div>
-          <div>
-            <img src="./images/Callisto.png" width="98px">
-          </div>
-          <div class="spacer"></div>
-          Callisto
-          <div class="spacer"></div>
-        </div>
-        <div id="GanymedeSelect" class="body-control foregroundMenu">
-          <div class="spacer"></div>
-          <div>
-            <img src="./images/Ganymede.png" width="98px">
-          </div>
-          <div class="spacer"></div>
-          Ganymede
-          <div class="spacer"></div>
-        </div>
-        <div id="EuropaSelect" class="body-control foregroundMenu">
-          <div class="spacer"></div>
-          <div>
-            <img src="./images/Europa.png" width="98px">
-          </div>
-          <div class="spacer"></div>
-          Europa
-          <div class="spacer"></div>
-        </div>
-        <div id="IoSelect" class="body-control foregroundMenu">
-          <div class="spacer"></div>
-          <div>
-            <img src="./images/Io.png" width="98px">
-          </div>
-          <div class="spacer"></div>
-          Io
-          <div class="spacer"></div>
-        </div>
-      </div>
-      <div class="spacer"></div>
-      🙠  Body Selection  🙢
     </div>
 
     <div class="dataTable backgroundMenu">
-      <div class="smallerSpacer"></div>
+      <div class="hideControl foregroundMenu">
+        🙠  Data Controls  🙢
+      </div>
+      <div class="spacer"></div>
       <div class="dataTableFlexBox midgroundMenu">
         <div id = "MeasureButton" class="dataTableControl foregroundMenu">
           Measure
@@ -107,9 +125,33 @@
           Observe
         </div>
       </div>
+      <div class="spacer"></div>
+      <div>
+        <div class="smallerSpacer"></div>
+        <div class="smallerSpacer midgroundMenu"></div>
+        <div class="smallerSpacer"></div>
+        <div class="mouseDataBox">
+          <div class="mouseDataBoxLabel foregroundNoShadow">X Position</div>
+          <div class="textData" id="mouseDataPositionX"></div>
+        </div>
+        <div class="smallerSpacer"></div>
+        <div class="smallerSpacer midgroundMenu"></div>
+        <div class="smallerSpacer"></div>
+        <div class="mouseDataBox">
+          <div class="mouseDataBoxLabel foregroundNoShadow">Y Position</div> 
+          <div class="textData" id="mouseDataPositionY"></div>
+        </div>
+      </div>
+      <div class="smallerSpacer"></div>
+      <div class="smallerSpacer midgroundMenu"></div>
     </div>
 
+    
+  </div>
+  </div>
 
+  <div id="loadingScreen" class="loadingScreenDiv">
+    Loading...
   </div>
 </body>
 <script type="importmap">

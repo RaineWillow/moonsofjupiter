@@ -2,8 +2,8 @@ import * as THREE from 'three';
 import {GLTFLoader} from 'GLTFLoader';
 
 const scene = new THREE.Scene();
-//const camera = new THREE.OrthographicCamera(window.innerWidth/2.0, window.innerWidth/2.0, window.innerHeight/2.0, window.innerHeight/2.0, 1.0, 10000.0);
-let camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.1, 10000);
+let camera = new THREE.OrthographicCamera(window.innerWidth/-2.0, window.innerWidth/2.0, window.innerHeight/-2.0, window.innerHeight/2.0, 0.1, 50000.0);
+//let camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.1, 50000);
 const renderer = new THREE.WebGLRenderer({antialias: true});
 renderer.setSize(window.innerWidth, window.innerHeight);
 
@@ -44,37 +44,6 @@ let ObserveMode = true;
 
 let container = document.getElementById("container");
 container.appendChild(renderer.domElement);
-let mouseX = 0;
-let mouseY = 0;
-
-function updateMouse(e) {
-  mouseX += e.movementX*0.0001;
-  mouseY += e.movementY*0.0001;
-
-  //var cameraVector = camera.getWorldDirection();
-  camera.rotation.set(mouseY, mouseX, 0);
-}
-
-document.addEventListener("pointerlockchange", lockChangeAlert, false);
-function lockChangeAlert() {
-  if (document.pointerLockElement === renderer.domElement) {
-    mouseX = camera.rotation.y;
-    mouseY = camera.rotation.x;
-    document.addEventListener("mousemove", updateMouse, false);
-  } else {
-    document.removeEventListener("mousemove", updateMouse, false);
-  }
-}
-
-renderer.domElement.addEventListener("mousedown", (event) => {
-  if (ObserveMode) {
-    renderer.domElement.requestPointerLock({unadjustedMouseMovement: true});
-  }
-});
-
-renderer.domElement.addEventListener("mouseup", (event) => {
-  document.exitPointerLock();
-});
 
 
 let lastUpdate = performance.now();
@@ -91,26 +60,25 @@ scene.add( light );
 
 var stars = new Array(0);
   for ( var i = 0; i < 10000; i ++ ) {
-    let x = THREE.Math.randFloatSpread( 20000 );
-    let y = THREE.Math.randFloatSpread( 20000 );
-    let z = THREE.Math.randFloatSpread( 20000 );
+    let x = THREE.Math.randFloatSpread( 8000 );
+    let y = THREE.Math.randFloatSpread( 4000 );
+    let z = THREE.Math.randFloat(-2000, -8000);
     stars.push(x, y, z);
   }
   var starsGeometry = new THREE.BufferGeometry();
   starsGeometry.setAttribute(
     "position", new THREE.Float32BufferAttribute(stars, 3)
   );
-  var starsMaterial = new THREE.PointsMaterial( { color: 0x888888 } );
+  var starsMaterial = new THREE.PointsMaterial( { color: 0x777777 } );
   var starField = new THREE.Points( starsGeometry, starsMaterial );
   scene.add( starField );
-var ambientLight = new THREE.AmbientLight( 0xffffff, 0.8);
+var ambientLight = new THREE.AmbientLight( 0xffffff, 1.4);
 scene.add( ambientLight );
 
 renderer.render(scene, camera);
 
 addEventListener("resize", () => {
-  camera.aspect = window.innerWidth / window.innerHeight
-  camera.updateProjectionMatrix()
+  
   renderer.setSize(window.innerWidth, window.innerHeight);
 })
 
@@ -121,6 +89,9 @@ let currentHourData = document.getElementById("currentHourSet");
 let animationSpeedDisplay = document.getElementById("animationSpeedDisplay");
 let zoomDisplay = document.getElementById("zoomDisplay");
 let zoomController = document.getElementById("zoomSlider");
+let maximumZoom = parseFloat(zoomController.getAttribute("max"))+0.32;
+
+camera.position.set(0, 0, 2000);
 
 //data table-----------------------------------------------------------------------------------------------------------------------------
 
@@ -176,6 +147,10 @@ class Planet {
   getRadius() {
     return this.size.x;
   }
+
+  getOrbitRadius() {
+    return this.orbitRadius;
+  }
 }
 
 let planets = [];
@@ -191,8 +166,6 @@ function togglePlaying() {
 
   if (playing) {
     element.innerHTML = '<svg stroke="#ffffff" xmlns="http://www.w3.org/2000/svg" height="40px" width="40px" fill="#ffffff" viewBox="0 0 320 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M48 64C21.5 64 0 85.5 0 112V400c0 26.5 21.5 48 48 48H80c26.5 0 48-21.5 48-48V112c0-26.5-21.5-48-48-48H48zm192 0c-26.5 0-48 21.5-48 48V400c0 26.5 21.5 48 48 48h32c26.5 0 48-21.5 48-48V112c0-26.5-21.5-48-48-48H240z"/></svg>';
-    mouseX = 0;
-    mouseY = 0;
   } else {
     element.innerHTML = '<svg stroke="#ffffff" xmlns="http://www.w3.org/2000/svg" fill="#ffffff" height="40px" width="40px" viewBox="0 0 384 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg>';
     animationSpeed = 0;
@@ -216,6 +189,33 @@ function decrementHour() {
 }
 document.getElementById("hourDecrementer").addEventListener("click", decrementHour);
 
+const maxSize = 2.5;
+
+function handleCameraLookat() {
+  if (selectedPlanet !== -1) {
+    let cameraPosToHandle = planets[selectedPlanet].getPosition();
+    //let radiusOfPlanet = planets[selectedPlanet].getRadius();
+    //let orbitRadius = planets[selectedPlanet].getOrbitRadius();
+    camera.position.set(cameraPosToHandle.x, cameraPosToHandle.y, camera.position.z);
+  }
+  //camera.zoom = zoom;
+  //camera.updateProjectionMatrix();
+  //camera.lookAt(cameraPosToHandle);
+  camera.left = (window.innerWidth/-2.0)*(maxSize*zoom);
+  camera.right = (window.innerWidth/2.0)*(maxSize*zoom);
+  camera.top = (window.innerHeight/-2.0)*(maxSize*zoom);
+  camera.bottom = (window.innerHeight/2.0)*(maxSize*zoom);
+  camera.updateProjectionMatrix();
+}
+
+function selectNone() {
+  document.getElementById("JupiterSelect").className = "body-control foregroundMenu";
+  document.getElementById("CallistoSelect").className = "body-control foregroundMenu";
+  document.getElementById("GanymedeSelect").className = "body-control foregroundMenu";
+  document.getElementById("EuropaSelect").className = "body-control foregroundMenu";
+  document.getElementById("IoSelect").className = "body-control foregroundMenu";
+  selectedPlanet = -1;
+}
 
 function selectJupiter() {
   document.getElementById("JupiterSelect").className = "body-control foregroundMenu foregroundMenuSelected";
@@ -224,10 +224,6 @@ function selectJupiter() {
   document.getElementById("EuropaSelect").className = "body-control foregroundMenu";
   document.getElementById("IoSelect").className = "body-control foregroundMenu";
   selectedPlanet = 0;
-  let cameraPosToHandle = planets[selectedPlanet].getPosition();
-  let radiusOfPlanet = planets[selectedPlanet].getRadius();
-  camera.position.set(cameraPosToHandle.x, cameraPosToHandle.y, cameraPosToHandle.z+radiusOfPlanet*3.4*zoom);
-  camera.lookAt(cameraPosToHandle);
 }
 document.getElementById("JupiterSelect").addEventListener("click", selectJupiter);
 
@@ -238,10 +234,6 @@ function selectCallisto() {
   document.getElementById("EuropaSelect").className = "body-control foregroundMenu";
   document.getElementById("IoSelect").className = "body-control foregroundMenu";
   selectedPlanet = 1;
-  let cameraPosToHandle = planets[selectedPlanet].getPosition();
-  let radiusOfPlanet = planets[selectedPlanet].getRadius();
-  camera.position.set(cameraPosToHandle.x, cameraPosToHandle.y, cameraPosToHandle.z+radiusOfPlanet*3.4*zoom);
-  camera.lookAt(cameraPosToHandle);
 }
 document.getElementById("CallistoSelect").addEventListener("click", selectCallisto);
 
@@ -252,10 +244,6 @@ function selectGanymede() {
   document.getElementById("EuropaSelect").className = "body-control foregroundMenu";
   document.getElementById("IoSelect").className = "body-control foregroundMenu";
   selectedPlanet = 2;
-  let cameraPosToHandle = planets[selectedPlanet].getPosition();
-  let radiusOfPlanet = planets[selectedPlanet].getRadius();
-  camera.position.set(cameraPosToHandle.x, cameraPosToHandle.y, cameraPosToHandle.z+radiusOfPlanet*3.4*zoom);
-  camera.lookAt(cameraPosToHandle);
 }
 document.getElementById("GanymedeSelect").addEventListener("click", selectGanymede);
 
@@ -266,10 +254,6 @@ function selectEuropa() {
   document.getElementById("EuropaSelect").className = "body-control foregroundMenu foregroundMenuSelected";
   document.getElementById("IoSelect").className = "body-control foregroundMenu";
   selectedPlanet = 3;
-  let cameraPosToHandle = planets[selectedPlanet].getPosition();
-  let radiusOfPlanet = planets[selectedPlanet].getRadius();
-  camera.position.set(cameraPosToHandle.x, cameraPosToHandle.y, cameraPosToHandle.z+radiusOfPlanet*3.4*zoom);
-  camera.lookAt(cameraPosToHandle);
 }
 document.getElementById("EuropaSelect").addEventListener("click", selectEuropa);
 
@@ -280,12 +264,64 @@ function selectIo() {
   document.getElementById("EuropaSelect").className = "body-control foregroundMenu";
   document.getElementById("IoSelect").className = "body-control foregroundMenu foregroundMenuSelected";
   selectedPlanet = 4;
-  let cameraPosToHandle = planets[selectedPlanet].getPosition();
-  let radiusOfPlanet = planets[selectedPlanet].getRadius();
-  camera.position.set(cameraPosToHandle.x, cameraPosToHandle.y, cameraPosToHandle.z+radiusOfPlanet*3.4*zoom);
-  camera.lookAt(cameraPosToHandle);
 }
 document.getElementById("IoSelect").addEventListener("click", selectIo);
+
+let mouseDataX = 0;
+let mouseDataY = 0;
+let mouseDataXContainer = document.getElementById("mouseDataPositionX");
+let mouseDataYContainer = document.getElementById("mouseDataPositionY");
+
+let maxCameraX = 0;
+let minCameraX = 0;
+let maxCameraY = 0;
+let minCameraY = 0;
+
+function updateMouseDrag(e) {
+  let mouseX = e.movementX;
+  let mouseY = e.movementY;
+
+  let updateX = Math.min(Math.max(camera.position.x + (-mouseX*(2*camera.right/window.innerWidth)), minCameraX), maxCameraX);
+  let updateY = Math.min(Math.max(camera.position.y + (-mouseY*(2*camera.bottom/window.innerHeight)), minCameraY), maxCameraY);
+
+  //var cameraVector = camera.getWorldDirection();
+  camera.position.set(updateX, updateY, 2000);
+}
+
+function updateMouse(e) {
+  let mouseX = e.clientX-window.innerWidth/2;
+  let mouseY = e.clientY-window.innerHeight/2;
+  mouseDataX = camera.position.x+mouseX*(2*camera.right/window.innerWidth);
+  mouseDataY = camera.position.y+mouseY*(2*camera.bottom/window.innerHeight);
+}
+
+/*
+document.addEventListener("pointerlockchange", lockChangeAlert, false);
+function lockChangeAlert() {
+  if (document.pointerLockElement === renderer.domElement) {
+    document.addEventListener("mousemove", updateMouse, false);
+  } else {
+    document.removeEventListener("mousemove", updateMouse, false);
+  }
+}
+*/
+renderer.domElement.addEventListener("mousedown", (event) => {
+  if (ObserveMode) {
+    document.addEventListener("mousemove", updateMouseDrag, false);
+    selectNone();
+    //renderer.domElement.requestPointerLock({unadjustedMouseMovement: true});
+  } else {
+    mouseDataXContainer.innerText = mouseDataX.toPrecision(7).toString();
+    mouseDataYContainer.innerText = mouseDataY.toPrecision(7).toString();
+  }
+});
+
+document.addEventListener("mousemove", updateMouse, false);
+
+renderer.domElement.addEventListener("mouseup", (event) => {
+  //document.exitPointerLock();
+  document.removeEventListener("mousemove", updateMouseDrag, false);
+});
 
 function setObserveMode() {
   document.getElementById("MeasureButton").className = "dataTableControl foregroundMenu";
@@ -298,30 +334,53 @@ function setMeasureMode() {
   document.getElementById("MeasureButton").className = "dataTableControl foregroundMenu foregroundMenuSelected";
   document.getElementById("ObserveButton").className = "dataTableControl foregroundMenu";
   ObserveMode = false;
-  let cameraPosToHandle = planets[selectedPlanet].getPosition();
-  let radiusOfPlanet = planets[selectedPlanet].getRadius();
-  camera.position.set(cameraPosToHandle.x, cameraPosToHandle.y, cameraPosToHandle.z+radiusOfPlanet*3.4*zoom);
-  camera.lookAt(cameraPosToHandle);
+  mouseDataXContainer.innerText = "-";
+  mouseDataYContainer.innerText = "-";
+  handleCameraLookat();
 }
+
+function setBodySelectClosed() {
+  document.getElementById("bodyOpen").className = "bodySelector backgroundMenu hider";
+  document.getElementById("bodyClosed").className = "hideControlContainer backgroundMenu";
+  document.getElementById("topHeightController").className = "topuiContainer topuiContainerOverride";
+}
+document.getElementById("setBodySelectClosed").addEventListener("click", setBodySelectClosed);
+
+function setBodySelectOpen() {
+  document.getElementById("bodyOpen").className = "bodySelector backgroundMenu";
+  document.getElementById("bodyClosed").className = "hideControlContainer backgroundMenu hider";
+  document.getElementById("topHeightController").className = "topuiContainer";
+}
+document.getElementById("setBodySelectOpen").addEventListener("click", setBodySelectOpen);
+
+
+
 document.getElementById("MeasureButton").addEventListener("click", setMeasureMode);
 //update RENDERING LOGIC-----------------------------------------------------------------------------------------------------------------
 
 let lastX = 0;
 const handleCamera = function() {
-  let cameraPosToHandle = planets[selectedPlanet].getPosition();
-  let radiusOfPlanet = planets[selectedPlanet].getRadius();
-  camera.position.set(cameraPosToHandle.x, cameraPosToHandle.y, cameraPosToHandle.z+radiusOfPlanet*3.4*zoom);
-  if (playing) {
-    camera.lookAt(cameraPosToHandle);
-  }
-  zoom = 6.65/zoomController.value;
+  let maxBorderX = 1500+(window.innerWidth/2.0)*(maxSize);
+  let minBorderX = -1500-(window.innerWidth/2.0)*(maxSize);
+  let maxBorderY = 1200+(window.innerHeight/2.0)*(maxSize);
+  let minBorderY = -1200-(window.innerHeight/2.0)*(maxSize);
+
+  maxCameraX = maxBorderX-camera.right;
+  minCameraX = minBorderX+camera.right;
+  maxCameraY = maxBorderY-camera.right;
+  minCameraY = minBorderY+camera.right;
+
+  let clampCamX = Math.min(Math.max(camera.position.x, minCameraX), maxCameraX);
+  let clampCamY = Math.min(Math.max(camera.position.y, minCameraY), maxCameraY);
+
+  camera.position.set(clampCamX, clampCamY, camera.position.z);
+
+  handleCameraLookat();
+  zoom = 1-(parseFloat(zoomController.value)/maximumZoom);
   zoomDisplay.innerText = parseFloat(zoomController.value).toPrecision(3).toString();
 }
 
 const timeHandlingAndControls = function() {
-  now = performance.now();
-  dt = now-lastUpdate;
-  lastUpdate = now;
 
   if (playing) {
     animationSpeed = animationController.value;
@@ -333,23 +392,47 @@ const timeHandlingAndControls = function() {
   animationSpeedDisplay.innerText = animationController.value;
 
   orbitTime += dt*0.001*animationSpeed;
+  if (ObserveMode) {
+    mouseDataXContainer.innerText = mouseDataX.toPrecision(7).toString();
+    mouseDataYContainer.innerText = mouseDataY.toPrecision(7).toString();
+  }
 }
 
+
+let loaded = false;
+let loadingScreen = document.getElementById("loadingScreen");
+let loadingAnimation = 0;
+let loadingScreenInnerText = "Loading...";
 
 const rendering = function() {
   requestAnimationFrame(rendering);
 
-  timeHandlingAndControls();
-  for (let i = 0; i < planets.length; i++) {
-    planets[i].update(dt*animationSpeed, orbitTime);
+  now = performance.now();
+  dt = now-lastUpdate;
+  lastUpdate = now;
+
+  if (loaded) {
+    timeHandlingAndControls();
+    for (let i = 0; i < planets.length; i++) {
+      planets[i].update(dt*animationSpeed, orbitTime);
+    }
+    handleCamera();
+      //camera.position.set(Math.sin(dt*0.001)*500, 0, Math.cos(dt*0.001)*500);
+      //camera.lookAt(new THREE.Vector3(0,0,0));
+    renderer.render(scene, camera);
+  } else {
+    loadingAnimation += dt;
+
+    if (loadingAnimation >= 500) {
+      loadingAnimation = 0;
+      loadingScreenInnerText = loadingScreenInnerText==="Loading..." ? "Loading." : loadingScreenInnerText+".";
+      loadingScreen.innerText = loadingScreenInnerText;
+    }
   }
-  handleCamera();
-    //camera.position.set(Math.sin(dt*0.001)*500, 0, Math.cos(dt*0.001)*500);
-    //camera.lookAt(new THREE.Vector3(0,0,0));
-  renderer.render(scene, camera);
 }
 
 async function main() {
+  setBodySelectClosed();
   let JupiterModel = await modelLoader('models/Jupiter.glb');
   let CallistoModel = await modelLoader('models/Callisto.glb');
   let GanymedeModel = await modelLoader('models/Ganymede.glb');
@@ -363,15 +446,19 @@ async function main() {
   planets.push(new Planet(IoModel, iRadius*spaceConversion, iPeriod, new THREE.Vector3(iSize*spaceConversion, iSize*spaceConversion, iSize*spaceConversion), 4.7));
 
   selectJupiter();
-  rendering();
+  loadingScreen.className = "hider";
+  loaded=true;
 }
+
+rendering();
 
 main();
 
 
 addEventListener("wheel", (event) => {
   let adjustAmount = event.deltaY*0.0015*-1;
-  console.log(adjustAmount);
-  zoomController.value = Math.min(Math.max(parseFloat(zoomController.value)+adjustAmount, 1), 6.65).toPrecision(3).toString();
+  zoomController.value = Math.min(Math.max(parseFloat(zoomController.value)+adjustAmount, 1), maximumZoom).toPrecision(3).toString();
 });
+
+
 
