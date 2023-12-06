@@ -77,10 +77,7 @@ scene.add( ambientLight );
 
 renderer.render(scene, camera);
 
-addEventListener("resize", () => {
-  
-  renderer.setSize(window.innerWidth, window.innerHeight);
-})
+
 
 let animationSpeed = 0.1;
 let zoom = 1.0;
@@ -102,6 +99,13 @@ let gSize = 5260;
 let eSize = 3140;
 let iSize = 3630;
 
+//names of Stellar Bodies
+let jName = "Jupiter";
+let cName = "Callisto";
+let gName = "Ganymede";
+let eName = "Europa";
+let iName = "Io";
+
 //period of orbit of each moon, in hours
 let cPeriod = 400.5;
 let gPeriod = 172;
@@ -113,12 +117,30 @@ let cRadius = 1883000;
 let gRadius = 1070000;
 let eRadius = 670900;
 let iRadius = 421600;
-//---------------------------------------------------------------------------------------------------------------------------------------
-let spaceConversion = 10 ** -3;
 
+let spaceConversion = 10 ** -3;
+//---------------------------------------------------------------------------------------------------------------------------------------
+
+document.getElementById("jName").innerText=jName;
+document.getElementById("cName").innerText=cName;
+document.getElementById("gName").innerText=gName;
+document.getElementById("eName").innerText=eName;
+document.getElementById("iName").innerText=iName;
+
+var labelsCanvas = document.getElementById("PlanetLabels");
+let context = labelsCanvas.getContext("2d");
+context.canvas.width = window.innerWidth;
+context.canvas.height = window.innerHeight;
+
+addEventListener("resize", () => {
+  context.canvas.width = window.innerWidth;
+  context.canvas.height = window.innerHeight;
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
 
 class Planet {
-  constructor(model, orbitRadius, orbitSpeed, size, startPos) {
+  constructor(name, model, orbitRadius, orbitSpeed, size, startPos) {
+    this.name = name;
     this.model = model;
     this.orbitRadius = orbitRadius;
     this.orbitSpeed = orbitSpeed;
@@ -150,6 +172,10 @@ class Planet {
 
   getOrbitRadius() {
     return this.orbitRadius;
+  }
+  
+  getName() {
+    return this.name;
   }
 }
 
@@ -358,7 +384,6 @@ document.getElementById("setBodySelectOpen").addEventListener("click", setBodySe
 document.getElementById("MeasureButton").addEventListener("click", setMeasureMode);
 //update RENDERING LOGIC-----------------------------------------------------------------------------------------------------------------
 
-let lastX = 0;
 const handleCamera = function() {
   let maxBorderX = 1500+(window.innerWidth/2.0)*(maxSize);
   let minBorderX = -1500-(window.innerWidth/2.0)*(maxSize);
@@ -404,6 +429,10 @@ let loadingScreen = document.getElementById("loadingScreen");
 let loadingAnimation = 0;
 let loadingScreenInnerText = "Loading...";
 
+const handleLabels = function() {
+  context.clearRect(0, 0, labelsCanvas.width, labelsCanvas.height);
+}
+
 const rendering = function() {
   requestAnimationFrame(rendering);
 
@@ -412,9 +441,24 @@ const rendering = function() {
   lastUpdate = now;
 
   if (loaded) {
+    handleLabels();
     timeHandlingAndControls();
     for (let i = 0; i < planets.length; i++) {
       planets[i].update(dt*animationSpeed, orbitTime);
+      let position = planets[i].getPosition();
+      let planetRadius = planets[i].getRadius();
+      position.y += planetRadius/2;
+      let name = planets[i].getName();
+
+      let labelPositionX = (position.x-camera.position.x)/(2*camera.right/window.innerWidth);
+      let labelPositionY = (position.y-camera.position.y)/(2*camera.bottom/window.innerHeight);
+      labelPositionY += window.innerHeight/2;
+      labelPositionX += window.innerWidth/2;
+      context.fillStyle = "rgb(255, 255, 255)";
+      context.strokeStyle = "rgb(255, 255, 255)";
+      context.font = "10px monospace";
+      context.textAlign = "center";
+      context.fillText(name, labelPositionX, labelPositionY+11);
     }
     handleCamera();
       //camera.position.set(Math.sin(dt*0.001)*500, 0, Math.cos(dt*0.001)*500);
@@ -439,11 +483,11 @@ async function main() {
   let EuropaModel = await modelLoader('models/Europa.glb');
   let IoModel = await modelLoader('models/Io.glb');
 
-  planets.push(new Planet(JupiterModel, 0, 1, new THREE.Vector3(jSize*spaceConversion, jSize*spaceConversion, jSize*spaceConversion), 0, 2.0));
-  planets.push(new Planet(CallistoModel, cRadius*spaceConversion, cPeriod, new THREE.Vector3(cSize*spaceConversion, cSize*spaceConversion, cSize*spaceConversion), 0));
-  planets.push(new Planet(GanymedeModel, gRadius*spaceConversion, gPeriod, new THREE.Vector3(gSize*spaceConversion, gSize*spaceConversion, gSize*spaceConversion), 1.4));
-  planets.push(new Planet(EuropaModel, eRadius*spaceConversion, ePeriod, new THREE.Vector3(eSize*spaceConversion, eSize*spaceConversion, eSize*spaceConversion), 3.1));
-  planets.push(new Planet(IoModel, iRadius*spaceConversion, iPeriod, new THREE.Vector3(iSize*spaceConversion, iSize*spaceConversion, iSize*spaceConversion), 4.7));
+  planets.push(new Planet(jName, JupiterModel, 0, 1, new THREE.Vector3(jSize*spaceConversion, jSize*spaceConversion, jSize*spaceConversion), 0, 2.0));
+  planets.push(new Planet(cName, CallistoModel, cRadius*spaceConversion, cPeriod, new THREE.Vector3(cSize*spaceConversion, cSize*spaceConversion, cSize*spaceConversion), 0));
+  planets.push(new Planet(gName, GanymedeModel, gRadius*spaceConversion, gPeriod, new THREE.Vector3(gSize*spaceConversion, gSize*spaceConversion, gSize*spaceConversion), 1.4));
+  planets.push(new Planet(eName, EuropaModel, eRadius*spaceConversion, ePeriod, new THREE.Vector3(eSize*spaceConversion, eSize*spaceConversion, eSize*spaceConversion), 3.1));
+  planets.push(new Planet(iName, IoModel, iRadius*spaceConversion, iPeriod, new THREE.Vector3(iSize*spaceConversion, iSize*spaceConversion, iSize*spaceConversion), 4.7));
 
   selectJupiter();
   loadingScreen.className = "hider";

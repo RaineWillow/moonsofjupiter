@@ -12,7 +12,7 @@
   <div id="container" class="containerDiv">
 
   </div>
-
+  <canvas id="PlanetLabels" class="labelsCanvas"></canvas>
   <div id="topHeightController" class="topuiContainer">
   
     <div id="bodyOpen" class="bodySelector backgroundMenu hider">
@@ -27,7 +27,7 @@
             <img src="./images/Jupiter.png" width="90%">
           </div>
           <div class="spacer"></div>
-          Jupiter
+          <span id="jName"></span>
           <div class="spacer"></div>
         </div>
         <div id="CallistoSelect" class="body-control foregroundMenu">
@@ -36,7 +36,7 @@
             <img src="./images/Callisto.png" width="90%">
           </div>
           <div class="spacer"></div>
-          Callisto
+          <span id="cName"></span>
           <div class="spacer"></div>
         </div>
         <div id="GanymedeSelect" class="body-control foregroundMenu">
@@ -45,7 +45,7 @@
             <img src="./images/Ganymede.png" width="90%">
           </div>
           <div class="spacer"></div>
-          Ganymede
+          <span id="gName"></span>
           <div class="spacer"></div>
         </div>
         <div id="EuropaSelect" class="body-control foregroundMenu">
@@ -54,7 +54,7 @@
             <img src="./images/Europa.png" width="90%">
           </div>
           <div class="spacer"></div>
-          Europa
+          <span id="eName"></span>
           <div class="spacer"></div>
         </div>
         <div id="IoSelect" class="body-control foregroundMenu">
@@ -63,7 +63,7 @@
             <img src="./images/Io.png" width="90%">
           </div>
           <div class="spacer"></div>
-          Io
+          <span id="iName"></span>
           <div class="spacer"></div>
         </div>
       </div>
@@ -149,6 +149,8 @@
     
   </div>
   </div>
+
+  
 
   <div id="loadingScreen" class="loadingScreenDiv">
     Loading...

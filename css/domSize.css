@@ -1,5 +1,12 @@
+@font-face {
+  font-family: Montserrat;
+  src:url("/fonts/Montserrat.ttf");
+}
+
 body {
+  font-family: Montserrat;
   margin: 0px;
+  font-size: 13px;
 }
 
 .loadingScreenDiv {
@@ -126,6 +133,7 @@ body {
 .hideControl {
   width:90%;
   height: 25px;
+  line-height: 24px;
   cursor: pointer;
   margin: 0 auto;
   border-radius: 5px;
@@ -137,7 +145,7 @@ body {
 }
 
 .dataTableControl {
-  font-size: 20px;
+  font-size: 15px;
   border-radius: 5px;
   width: 80px;
   min-width: 80px;
@@ -187,4 +195,13 @@ input:disabled {
 
 .mouseDataBoxLabel {
   user-select: none;
+}
+
+.labelsCanvas {
+  position:absolute;
+  left: 0%;
+  top: 0%;
+  height: 100%;
+  width: 100%;
+  pointer-events: none;
 }
