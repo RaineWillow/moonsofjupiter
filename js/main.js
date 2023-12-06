@@ -89,7 +89,7 @@ let zoomDisplay = document.getElementById("zoomDisplay");
 let zoomController = document.getElementById("zoomSlider");
 let maximumZoom = parseFloat(zoomController.getAttribute("max"))+0.32;
 
-camera.position.set(0, 0, 2100);
+camera.position.set(0, 0, 2200);
 
 //data table-----------------------------------------------------------------------------------------------------------------------------
 
