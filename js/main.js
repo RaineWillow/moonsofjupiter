@@ -89,7 +89,7 @@ let zoomDisplay = document.getElementById("zoomDisplay");
 let zoomController = document.getElementById("zoomSlider");
 let maximumZoom = parseFloat(zoomController.getAttribute("max"))+0.32;
 
-camera.position.set(0, 0, 2200);
+
 
 //data table-----------------------------------------------------------------------------------------------------------------------------
 
@@ -119,8 +119,12 @@ let gRadius = 1070000;
 let eRadius = 670900;
 let iRadius = 421600;
 
-let spaceConversion = 10 ** -3 * 1.1123;
+let spaceConversionModifier = 1.1123;
+
+let spaceConversion = 10 ** -3 * spaceConversionModifier;
 //---------------------------------------------------------------------------------------------------------------------------------------
+
+camera.position.set(0, 0, 2000*spaceConversionModifier);
 
 document.getElementById("jName").innerText=jName;
 document.getElementById("cName").innerText=cName;
