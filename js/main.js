@@ -444,7 +444,6 @@ const rendering = function() {
     handleLabels();
     timeHandlingAndControls();
     for (let i = 0; i < planets.length; i++) {
-      planets[i].update(dt*animationSpeed, orbitTime);
       let position = planets[i].getPosition();
       let planetRadius = planets[i].getRadius();
       position.y += planetRadius/2;
@@ -459,6 +458,8 @@ const rendering = function() {
       context.font = "10px monospace";
       context.textAlign = "center";
       context.fillText(name, labelPositionX, labelPositionY+11);
+      
+      planets[i].update(dt*animationSpeed, orbitTime);
     }
     handleCamera();
       //camera.position.set(Math.sin(dt*0.001)*500, 0, Math.cos(dt*0.001)*500);
