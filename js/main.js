@@ -462,7 +462,6 @@ const rendering = function() {
       
       planets[i].update(dt*animationSpeed, orbitTime);
     }
-    console.log(planets[1].position);
     handleCamera();
       //camera.position.set(Math.sin(dt*0.001)*500, 0, Math.cos(dt*0.001)*500);
       //camera.lookAt(new THREE.Vector3(0,0,0));
