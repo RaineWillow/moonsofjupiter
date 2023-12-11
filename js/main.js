@@ -87,7 +87,7 @@ let currentHourData = document.getElementById("currentHourSet");
 let animationSpeedDisplay = document.getElementById("animationSpeedDisplay");
 let zoomDisplay = document.getElementById("zoomDisplay");
 let zoomController = document.getElementById("zoomSlider");
-let maximumZoom = parseFloat(zoomController.getAttribute("max"))+0.32;
+let maximumZoom = parseFloat(zoomController.getAttribute("max"))+0.325;
 
 
 
@@ -119,7 +119,7 @@ let gRadius = 1070000;
 let eRadius = 670900;
 let iRadius = 421600;
 
-let spaceConversionModifier = 1.1123;
+let spaceConversionModifier = 1.1189811188811188811188811188811;
 
 let spaceConversion = 10 ** -3 * spaceConversionModifier;
 //---------------------------------------------------------------------------------------------------------------------------------------
@@ -162,6 +162,7 @@ class Planet {
   update(dt, oTime) {
     this.model.rotation.y -= dt*0.00003;
     this.position = rotate2d(this.orbitRadius, this.offset+PI*2*(oTime/this.orbitSpeed));
+    
     //console.log("Planet with offset: " + this.offset);
     //console.log(Math.PI*2*(oTime/this.orbitSpeed));
     setModelPosition(this.model, this.position);
@@ -372,7 +373,7 @@ function setMeasureMode() {
 
 function setBodySelectClosed() {
   document.getElementById("bodyOpen").className = "bodySelector backgroundMenu hider";
-  document.getElementById("bodyClosed").className = "hideControlContainer backgroundMenu";
+  document.getElementById("bodyClosed").className = "hideControlContainer backgroundMenu hider";
   document.getElementById("topHeightController").className = "topuiContainer topuiContainerOverride";
 }
 document.getElementById("setBodySelectClosed").addEventListener("click", setBodySelectClosed);
@@ -380,7 +381,7 @@ document.getElementById("setBodySelectClosed").addEventListener("click", setBody
 function setBodySelectOpen() {
   document.getElementById("bodyOpen").className = "bodySelector backgroundMenu";
   document.getElementById("bodyClosed").className = "hideControlContainer backgroundMenu hider";
-  document.getElementById("topHeightController").className = "topuiContainer";
+  //document.getElementById("topHeightController").className = "topuiContainer";
 }
 document.getElementById("setBodySelectOpen").addEventListener("click", setBodySelectOpen);
 
@@ -434,7 +435,19 @@ let loadingScreen = document.getElementById("loadingScreen");
 let loadingAnimation = 0;
 let loadingScreenInnerText = "Loading...";
 
+
+let lastSliderValue = parseFloat(zoomController.value);
+
 const handleLabels = function() {
+  if (parseFloat(zoomController.value) !== lastSliderValue) {
+    console.log(parseFloat(zoomController.value) >= parseFloat(zoomController.getAttribute("max"))/2);
+    lastSliderValue = parseFloat(zoomController.value);
+    if (parseFloat(zoomController.value) >= parseFloat(zoomController.getAttribute("max"))/1.3) {
+      labelsCanvas.className = "labelsCanvas hider";
+    } else {
+      labelsCanvas.className = "labelsCanvas";
+    }
+  }
   context.clearRect(0, 0, labelsCanvas.width, labelsCanvas.height);
 }
 
@@ -460,9 +473,13 @@ const rendering = function() {
       labelPositionX += window.innerWidth/2;
       context.fillStyle = "rgb(255, 255, 255)";
       context.strokeStyle = "rgb(255, 255, 255)";
-      context.font = "10px monospace";
+      context.font = "9px monospace";
       context.textAlign = "center";
-      context.fillText(name, labelPositionX, labelPositionY+11);
+      context.fillText("^", labelPositionX, labelPositionY+11);
+      context.fillText("|", labelPositionX, labelPositionY+15);
+      //context.beginPath();
+      //context.arc(labelPositionX, labelPositionY+11, 50, 0, 2*Math.pi);
+      //context.fill();
       
       planets[i].update(dt*animationSpeed, orbitTime);
     }
@@ -490,25 +507,26 @@ async function main() {
   let IoModel = await modelLoader('models/Io.glb');
 
   planets.push(new Planet(jName, JupiterModel, 0, 1, new THREE.Vector3(jSize*spaceConversion, jSize*spaceConversion, jSize*spaceConversion), 0, 2.0));
-  planets.push(new Planet(cName, CallistoModel, cRadius*spaceConversion, cPeriod, new THREE.Vector3(cSize*spaceConversion, cSize*spaceConversion, cSize*spaceConversion), 0));
-  planets.push(new Planet(gName, GanymedeModel, gRadius*spaceConversion, gPeriod, new THREE.Vector3(gSize*spaceConversion, gSize*spaceConversion, gSize*spaceConversion), 1.4));
-  planets.push(new Planet(eName, EuropaModel, eRadius*spaceConversion, ePeriod, new THREE.Vector3(eSize*spaceConversion, eSize*spaceConversion, eSize*spaceConversion), 3.1));
-  planets.push(new Planet(iName, IoModel, iRadius*spaceConversion, iPeriod, new THREE.Vector3(iSize*spaceConversion, iSize*spaceConversion, iSize*spaceConversion), 4.7));
+  planets.push(new Planet(cName, CallistoModel, cRadius*spaceConversion, cPeriod, new THREE.Vector3(cSize*spaceConversion, cSize*spaceConversion, cSize*spaceConversion), 0.2+PI/2));
+  planets.push(new Planet(gName, GanymedeModel, gRadius*spaceConversion, gPeriod, new THREE.Vector3(gSize*spaceConversion, gSize*spaceConversion, gSize*spaceConversion), 1.43*PI));
+  planets.push(new Planet(eName, EuropaModel, eRadius*spaceConversion, ePeriod, new THREE.Vector3(eSize*spaceConversion, eSize*spaceConversion, eSize*spaceConversion), 0.05+PI/2));
+  planets.push(new Planet(iName, IoModel, iRadius*spaceConversion, iPeriod, new THREE.Vector3(iSize*spaceConversion, iSize*spaceConversion, iSize*spaceConversion), PI/6-0.08));
 
   selectJupiter();
   loadingScreen.className = "hider";
   loaded=true;
 }
 
+addEventListener("wheel", (event) => {
+  let adjustAmount = event.deltaY*0.0015*-1;
+  zoomController.value = Math.min(Math.max(parseFloat(zoomController.value)+adjustAmount, 1), maximumZoom).toPrecision(3).toString();
+}, {passive: false});
+
 rendering();
 
 main();
 
 
-addEventListener("wheel", (event) => {
-  let adjustAmount = event.deltaY*0.0015*-1;
-  zoomController.value = Math.min(Math.max(parseFloat(zoomController.value)+adjustAmount, 1), maximumZoom).toPrecision(3).toString();
-});
 
 
 

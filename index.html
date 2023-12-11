@@ -16,7 +16,7 @@
   <div id="topHeightController" class="topuiContainer">
   
     <div id="bodyOpen" class="bodySelector backgroundMenu hider">
-      <div id="setBodySelectClosed" class="hideControl foregroundMenu">
+      <div id="setBodySelectClosed" class="hideControl foregroundMenuNoHighlight">
         🙠  Body Selection  🙢
       </div>
       <div class="spacer"></div>
@@ -71,8 +71,8 @@
     </div>
 
 
-    <div id="bodyClosed" class="hideControlContainer backgroundMenu">
-      <div id="setBodySelectOpen" class="hideControl foregroundMenu">
+    <div id="bodyClosed" class="hideControlContainer backgroundMenu hider">
+      <div id="setBodySelectOpen" class="hideControl foregroundMenuNoHighlight">
         🙠  Body Selection  🙢
       </div>
     </div>
@@ -80,7 +80,7 @@
 
   <div class="uiContainer">
     <div class="timeController backgroundMenu">
-      <div class="hideControl foregroundMenu">
+      <div class="hideControl foregroundMenuNoHighlight">
         🙠  Animation Controls  🙢
       </div>
       <div class="spacer"></div>
@@ -108,12 +108,12 @@
       <div class="smallerSpacer"></div>
       <div class="slider midgroundMenu">
         Camera Zoom: <span id="zoomDisplay"></span>
-        <input type="range" min="1.0" max="8" value="6.65" step="0.01" class="innerSlider" id="zoomSlider">
+        <input type="range" min="1.0" max="8" value="1.0" step="0.01" class="innerSlider" id="zoomSlider">
       </div>
     </div>
 
     <div class="dataTable backgroundMenu">
-      <div class="hideControl foregroundMenu">
+      <div class="hideControl foregroundMenuNoHighlight">
         🙠  Data Controls  🙢
       </div>
       <div class="spacer"></div>
@@ -131,14 +131,14 @@
         <div class="smallerSpacer midgroundMenu"></div>
         <div class="smallerSpacer"></div>
         <div class="mouseDataBox">
-          <div class="mouseDataBoxLabel foregroundNoShadow">X Position</div>
+          <div class="mouseDataBoxLabel foregroundNoShadow">X Position (SU)</div>
           <div class="textData" id="mouseDataPositionX"></div>
         </div>
         <div class="smallerSpacer"></div>
         <div class="smallerSpacer midgroundMenu"></div>
         <div class="smallerSpacer"></div>
         <div class="mouseDataBox">
-          <div class="mouseDataBoxLabel foregroundNoShadow">Y Position</div> 
+          <div class="mouseDataBoxLabel foregroundNoShadow">Y Position (SU)</div> 
           <div class="textData" id="mouseDataPositionY"></div>
         </div>
       </div>
@@ -152,7 +152,7 @@
 
   
 
-  <div id="loadingScreen" class="loadingScreenDiv">
+  <div id="loadingScreen" class="loadingScreenDiv midgroundMenu">
     Loading...
   </div>
 </body>
